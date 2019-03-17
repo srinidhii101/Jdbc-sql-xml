@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.*;
 import java.util.Date;
@@ -30,7 +31,6 @@ public class SummaryReportGenerator implements SummaryReportGeneratorInterface {
     @Override
     public void generate(Date start, Date end, String outputFile)throws SQLException, ClassNotFoundException, ParserConfigurationException, IOException 
 		{
-			System.out.println(start.toString());
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			
 			String startDate = simpleDateFormat.format(start);
@@ -55,7 +55,6 @@ public class SummaryReportGenerator implements SummaryReportGeneratorInterface {
 		            "group by customers.CustomerID\n" +
 		            "having count(*) > 0;";
 
-		    System.out.println(customerInfoQuery);
 		    Statement customerInformationStatement = connection.createStatement();
 		    ResultSet customerInformationResults = customerInformationStatement.executeQuery(customerInfoQuery);
 
@@ -86,7 +85,11 @@ public class SummaryReportGenerator implements SummaryReportGeneratorInterface {
 		    
 		    Document document = generateDocument(customerInformationResults, productInformationResults,
 		    		supplierInformationResults, startDate, endDate);
-		    System.out.println(serialize(document));
+		    String xmlString = serialize(document);
+		    try (PrintWriter out = new PrintWriter(outputFile)) {
+		        out.println(xmlString);
+		    }
+
 		}
  
     

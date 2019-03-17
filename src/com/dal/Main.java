@@ -7,7 +7,6 @@ import java.util.Date;
 public class Main {
 
     public static void main(String[] args) {
-    	System.out.println(args[0]);
         try {
             if (args[0].isEmpty() || args[1].isEmpty() || args[2].isEmpty())
                 throw new Exception("Incorrect Arguments");
