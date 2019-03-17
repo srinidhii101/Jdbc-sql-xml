@@ -7,13 +7,19 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SummaryReportGenerator implements SummaryReportGeneratorInterface {
 
     @Override
-    public void generate(Date startDate, Date endDate, String outputFile) throws SQLException, ClassNotFoundException {
-
+    public void generate(Date start, Date end, String outputFile) throws SQLException, ClassNotFoundException {
+    	
+    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-mm-yyyy");
+    	
+    	String startDate = simpleDateFormat.format(start);
+    	String endDate = simpleDateFormat.format(end);
+    	
         JdbcConfig jdbcConfig = new JdbcConfig();
         JDBCConnector jdbcConnector = new JDBCConnector();
         Connection connection = jdbcConnector.connectionProvider(jdbcConfig);
@@ -33,6 +39,7 @@ public class SummaryReportGenerator implements SummaryReportGeneratorInterface {
                 "group by customers.CustomerID\n" +
                 "having count(*) > 0;";
 
+        System.out.println(customerInfoQuery);
         Statement customerInformationStatement = connection.createStatement();
         ResultSet customerInformationResults = customerInformationStatement.executeQuery(customerInfoQuery);
 

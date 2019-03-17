@@ -31,6 +31,7 @@ public class JdbcConfig {
     }
 
     public JdbcConfig() {
+    	System.out.println(System.getenv("DAL_MYSQL_USERNAME"));
         this.username = System.getenv("DAL_MYSQL_USERNAME");
         this.password = System.getenv("DAL_MYSQL_PASSWORD");
         this.database = System.getenv("DAL_MYSQL_DATABASE");
